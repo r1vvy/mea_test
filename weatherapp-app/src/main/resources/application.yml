@@ -29,6 +29,9 @@ spring:
     level:
       com.meawallet.weatherapp: DEBUG
 
+weather-api:
+  weather-url: http://api.met.no/weatherapi/locationforecast/2.0/compact?lat={latitude}&lon={longitude}
+
 server:
   error:
     include-message: always

@@ -4,11 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
-@SpringBootApplication(scanBasePackages = "com.meawallet")
+@SpringBootApplication(scanBasePackages = "com.meawallet.weatherapp")
 // IF CANT LOAD .ENV FILE, TRY THIS:
 //@PropertySource(value = "file:./.env")
 public class WeatherApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(WeatherApplication.class);
     }
 }

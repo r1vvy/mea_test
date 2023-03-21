@@ -1,9 +1,9 @@
 dependencies {
     implementation project(":weatherapp-core")
+    implementation project(":weatherapp-domain")
     implementation project(":weatherapp-in")
     implementation project(":weatherapp-out")
     implementation project(":weatherapp-repository")
-    implementation project(":weatherapp-domain")
 
     implementation 'org.springframework.boot:spring-boot-starter-web:3.0.3'
     // IF CANT LOAD .ENV FILE, TRY THIS:

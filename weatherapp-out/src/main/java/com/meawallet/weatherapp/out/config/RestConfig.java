@@ -9,7 +9,10 @@ import org.springframework.web.client.RestTemplate;
 public class RestConfig {
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        var restTemplate = new RestTemplate();
+        restTemplate.getInterceptors().add(new UserAgentInterceptor());
+
+        return restTemplate;
     }
 
     @Bean
