@@ -1,0 +1,48 @@
+version: '1.0.0'
+
+services:
+  database:
+    container_name: weatherapp-database
+    image: "mariadb:10.5.8"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    restart: always
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      TZ: 'UTC'
+      # Should be hidden in production environment
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
+    networks:
+      - weatherapp-network
+
+  database-admin:
+    container_name: weatherapp-adminer
+    image: adminer
+    ports:
+      - "${ADMINER_PORT}:${ADMINER_PORT}"
+    networks:
+      - weatherapp-network
+
+#  application:
+#    container_name: weatherapp-service
+#    image: weatherapp-service
+#    build:
+#      context: ./Dockerfile
+#    depends_on:
+#     - database
+#    env_file:
+#      - .env
+#    ports:
+#     - "${WEATHERAPP_PORT}:${WEATHERAPP_PORT}"
+#    networks:
+#     - weatherapp-network
+
+
+networks:
+  weatherapp-network:

@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: dev
+
+  mariadb:
+    console:
+      enabled: true
+      path: /mariadb-console
+
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
+    driver-class-name: ${DB_DRIVER}
+
+  jpa:
+    hibernate:
+      # TODO: production should be update
+      ddl-auto: validate
+    show-sql: false
+
+  liquibase:
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
+    change-log: classpath:db/master.xml
+
+  logging:
+    level:
+      com.meawallet.weatherapp: DEBUG
+
+server:
+  error:
+    include-message: always
+  port: ${WEATHERAPP_PORT}
