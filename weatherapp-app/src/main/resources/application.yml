@@ -25,12 +25,12 @@ spring:
     url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
     change-log: classpath:db/master.xml
 
-  logging:
-    level:
-      com.meawallet.weatherapp: DEBUG
+logging:
+  level:
+    com.meawallet.weatherapp: DEBUG
 
 weather-api:
-  weather-url: http://api.met.no/weatherapi/locationforecast/2.0/compact?lat={latitude}&lon={longitude}
+  weather-url: https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={latitude}&lon={longitude}
 
 server:
   error:

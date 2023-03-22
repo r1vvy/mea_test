@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet id="create.locations.table" author="emils.seflers">
         <createTable tableName="locations">
-            <column name="id" type="INTEGER">
+            <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="latitude" type="DECIMAL(7,4)">
@@ -14,20 +14,13 @@
             <column name="longitude" type="DECIMAL(7,4)">
                 <constraints nullable="false"/>
             </column>
+            <column name="weather_info_id" type="INTEGER"/>
         </createTable>
     </changeSet>
     <changeSet id="create.weather_info.table" author="emils.seflers">
         <createTable tableName="weather_info">
-            <column name="id" type="INTEGER">
+            <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="location_id" type="INTEGER">
-                <constraints
-                        nullable="false"
-                        foreignKeyName="fk_weather_info_location_id"
-                        referencedTableName="locations"
-                        referencedColumnNames="id"
-                />
             </column>
             <column name="temperature" type="DECIMAL(3,1)">
                 <constraints nullable="false"/>
@@ -40,6 +33,18 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+    </changeSet>
+    <changeSet id="edit.temperature.column.name.weather_info.table" author="emils.seflers">
+        <renameColumn tableName="weather_info" oldColumnName="temperature" newColumnName="air_temperature" columnDataType="DECIMAL(3,1)"/>
+    </changeSet>
+    <changeSet id="add.relations.from.locations.to.weather_info" author="emils.seflers">
+        <addForeignKeyConstraint baseTableName="locations"
+                                 baseColumnNames="weather_info_id"
+                                 constraintName="fk_location_weather_info_id"
+                                 referencedTableName="weather_info"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
     </changeSet>
     
 </databaseChangeLog>

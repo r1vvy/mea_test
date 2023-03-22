@@ -1,9 +1,9 @@
 package com.meawallet.weatherapp.out;
 
-import com.meawallet.weatherapp.core.port.out.OutGoingWeatherApiPort;
+import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutGoingWeatherApiPort;
 import com.meawallet.weatherapp.domain.WeatherData;
 import com.meawallet.weatherapp.out.config.WeatherApiConfig;
-import com.meawallet.weatherapp.out.converter.HourlyWeatherDataDtoToWeatherDataDomainConverter;
+import com.meawallet.weatherapp.out.converter.WeatherDataOutDtoWeatherDataDomainConverter;
 import com.meawallet.weatherapp.out.dto.GetWeatherDataOutResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class GetWeatherDataByLatitudeAndLongitudeAdapterFromOutApi implements OutGoingWeatherApiPort {
+public class GetWeatherDataByLatitudeAndLongitudeAdapterFromGetWeatherDataFromOutApi implements GetWeatherDataFromOutGoingWeatherApiPort {
 
     private final RestTemplate restTemplate;
     private final WeatherApiConfig weatherApiConfig;
-    private final HourlyWeatherDataDtoToWeatherDataDomainConverter hourlyWeatherDataDtoToWeatherDataDomainConverter;
+    private final WeatherDataOutDtoWeatherDataDomainConverter hourlyWeatherDataDtoToWeatherDataDomainConverter;
 
 
     @Override
@@ -33,14 +33,15 @@ public class GetWeatherDataByLatitudeAndLongitudeAdapterFromOutApi implements Ou
                     .replace("{longitude}", longitude.toString());
             var response = restTemplate.getForEntity(url, GetWeatherDataOutResponse.class);
 
-            log.debug("Received weather data from Weather API: {}", response);
+            log.debug("Received weather data from Outgoing Weather API: {}", response);
 
             return response.getBody().timeseriesData()
                     .stream()
                     .map(hourlyWeatherDataDtoToWeatherDataDomainConverter::convert)
                     .collect(Collectors.toList());
+
         } catch (RestClientException restClientException) {
-            log.error("Received error from Weather API: {}", restClientException.getMessage());
+            log.error("Received error from Outgoing Weather API: {}", restClientException.getMessage());
             throw new RuntimeException(restClientException);
         }
     }

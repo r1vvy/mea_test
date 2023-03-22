@@ -8,8 +8,7 @@ import java.time.ZonedDateTime;
 @Builder(toBuilder = true)
 public record WeatherData(
         Integer id,
-        Location location,
-        BigDecimal temperature,
+        BigDecimal airTemperature,
         ZonedDateTime timestamp
 ) {
 }

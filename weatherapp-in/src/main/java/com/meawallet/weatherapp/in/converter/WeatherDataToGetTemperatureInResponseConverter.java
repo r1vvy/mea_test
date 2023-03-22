@@ -8,6 +8,6 @@ import org.springframework.stereotype.Controller;
 @Component
 public class WeatherDataToGetTemperatureInResponseConverter {
         public GetTemperatureInResponse convert(WeatherData weatherData) {
-            return new GetTemperatureInResponse(weatherData.temperature());
+            return new GetTemperatureInResponse(weatherData.airTemperature());
         }
 }

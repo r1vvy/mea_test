@@ -1,17 +1,20 @@
 package com.meawallet.weatherapp.core.service;
 
+import com.meawallet.weatherapp.core.exceptions.NotImplementedException;
+import com.meawallet.weatherapp.core.port.out.GetLocationByLatitudeAndLongitudePort;
 import com.meawallet.weatherapp.core.port.in.GetWeatherDataByLocationLatitudeAndLongitudeUseCase;
-import com.meawallet.weatherapp.core.port.out.OutGoingWeatherApiPort;
+import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutGoingWeatherApiPort;
 import com.meawallet.weatherapp.core.port.out.GetWeatherDataByLocationLatitudeAndLongitudeFromRepoPort;
 import com.meawallet.weatherapp.core.port.out.SaveLocationPort;
 import com.meawallet.weatherapp.core.port.out.SaveWeatherDataPort;
+import com.meawallet.weatherapp.core.utils.LatLongMathContext;
 import com.meawallet.weatherapp.domain.Location;
 import com.meawallet.weatherapp.domain.WeatherData;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -22,37 +25,44 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
     private final SaveLocationPort saveLocationPort;
     private final SaveWeatherDataPort saveWeatherDataPort;
     private final GetWeatherDataByLocationLatitudeAndLongitudeFromRepoPort getWeatherDataByLocationLatitudeAndLongitudeFromRepoPort;
-    private final OutGoingWeatherApiPort outGoingWeatherApiPort;
+    private final GetWeatherDataFromOutGoingWeatherApiPort getWeatherDataFromOutGoingWeatherApiPort;
     private final GetLocationByLatitudeAndLongitudePort getLocationByLatitudeAndLongitudePort;
 
+    // TODO
     @Override
     public WeatherData getWeatherData(BigDecimal latitude, BigDecimal longitude) {
-        Optional<WeatherData> weatherDataOptional = getWeatherDataByLocationLatitudeAndLongitudeFromRepoPort.getWeatherData(latitude, longitude);
-        WeatherData weatherData;
+        throw new NotImplementedException("Not implemented yet!");
+        /*
+        latitude.round(LatLongMathContext.LAT_LONG_PRECISION);
+        longitude.round(LatLongMathContext.LAT_LONG_PRECISION);
 
-        if (weatherDataOptional.isEmpty()) {
-            weatherData = outGoingWeatherApiPort.getWeatherData(latitude, longitude)
-                    .stream()
-                    .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No weather data found for the given location"));
+        var location = getLocationByLatitudeAndLongitudePort.getLocation(latitude, longitude);
 
-            Optional<Location> locationOptional = getLocationByLatitudeAndLongitudePort.getLocation(latitude, longitude);
-            if (locationOptional.isEmpty()) {
-                var location = Location.builder()
-                        .latitude(latitude)
-                        .longitude(longitude)
-                        .build();
+        if(location.isPresent()) {
+            WeatherData weatherData;
+            var currentTime = ZonedDateTime.now(ZoneOffset.UTC);
 
-                saveLocationPort.saveLocation(location);
+            weatherData= location.get().weatherData();
+
+            if(weatherData.timestamp().getHour() == currentTime.getHour()) {
+                return weatherData;
             }
+            else {
+                weatherData = getWeatherDataFromOutGoingWeatherApiPort.getWeatherData(latitude, longitude)
+                        .stream()
+                        .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
+                        .findAny()
+                        .orElseThrow(() -> new RuntimeException("Request failed!"));
 
-            saveWeatherDataPort.saveWeatherData(weatherData);
-        } else {
-
-            weatherData = weatherDataOptional.orElseThrow(() -> new RuntimeException("No weather data found for the given location"));
+                var savedWeatherData = saveWeatherDataPort.save(weatherData);
+                location.get()
+                        .toBuilder()
+                        .weatherData(savedWeatherData);
+            }
         }
+        saveLocationPort(location.get());
 
-        return weatherData;
+        return null;
+        */
     }
 }

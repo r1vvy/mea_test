@@ -4,10 +4,11 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 
-@Builder
+@Builder(toBuilder = true)
 public record Location(
         Integer id,
         BigDecimal latitude,
-        BigDecimal longitude
+        BigDecimal longitude,
+        WeatherData weatherData
 ) {
 }
