@@ -11,5 +11,4 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends JpaRepository<LocationEntity, Integer> {
     Optional<LocationEntity> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
-    Optional<WeatherDataEntity> findWeatherDataByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 }

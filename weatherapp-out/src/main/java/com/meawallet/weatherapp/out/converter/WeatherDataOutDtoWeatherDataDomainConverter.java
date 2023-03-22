@@ -10,7 +10,7 @@ public class WeatherDataOutDtoWeatherDataDomainConverter {
 
     public WeatherData convert(WeatherDataOutDto dto) {
         return WeatherData.builder()
-                .timestamp(dto.time())
+                .timestamp(dto.time().withFixedOffsetZone())
                 .airTemperature(dto.airTemperature())
                 .build();
     }

@@ -17,6 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     env_file:
       - .env
+    command: bash -c "./delete_old_weather_data.sh && exec mysqld"
     networks:
       - weatherapp-network
 

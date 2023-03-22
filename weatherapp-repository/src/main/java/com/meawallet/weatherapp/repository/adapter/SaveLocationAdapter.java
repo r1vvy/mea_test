@@ -5,10 +5,13 @@ import com.meawallet.weatherapp.domain.Location;
 import com.meawallet.weatherapp.repository.converter.LocationDomainToEntityConverter;
 import com.meawallet.weatherapp.repository.converter.LocationEntityToDomainConverter;
 import com.meawallet.weatherapp.repository.repository.LocationRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class SaveLocationAdapter implements SaveLocationPort {
@@ -17,9 +20,12 @@ public class SaveLocationAdapter implements SaveLocationPort {
     private final LocationEntityToDomainConverter locationEntityToDomainConverter;
 
     @Override
+    @Transactional
     public Location save(Location location) {
         var locationEntity = locationDomainToEntityConverter.convert(location);
         var savedEntity = locationRepository.save(locationEntity);
+
+        log.debug("Location entity saved successfully: {}", savedEntity);
 
         return locationEntityToDomainConverter.convert(savedEntity);
     }

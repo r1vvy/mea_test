@@ -13,16 +13,15 @@ public class LocationDomainToEntityConverter {
     private final WeatherDataDomainToEntityConverter weatherDataDomainToEntityConverter;
 
     public LocationEntity convert(Location location) {
-        var builder = LocationEntity
-                .builder()
+        var weatherDataEntity = weatherDataDomainToEntityConverter.convert(location.weatherData());
+
+        var locationEntity = LocationEntity.builder()
                 .id(location.id())
                 .latitude(location.latitude())
-                .longitude(location.longitude());
+                .longitude(location.longitude())
+                .weatherDataEntity(weatherDataEntity)
+                .build();
 
-        Optional.ofNullable(location.weatherData())
-                .map(weatherDataDomainToEntityConverter::convert)
-                .ifPresent(builder::weatherData);
-
-        return builder.build();
+        return locationEntity;
     }
 }

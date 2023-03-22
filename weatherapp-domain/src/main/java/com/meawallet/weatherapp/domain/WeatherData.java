@@ -10,5 +10,4 @@ public record WeatherData(
         Integer id,
         BigDecimal airTemperature,
         ZonedDateTime timestamp
-) {
-}
+) {}

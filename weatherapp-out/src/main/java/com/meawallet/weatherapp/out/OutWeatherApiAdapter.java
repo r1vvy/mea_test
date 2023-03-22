@@ -1,6 +1,6 @@
 package com.meawallet.weatherapp.out;
 
-import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutGoingWeatherApiPort;
+import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutWeatherApiPort;
 import com.meawallet.weatherapp.domain.WeatherData;
 import com.meawallet.weatherapp.out.config.WeatherApiConfig;
 import com.meawallet.weatherapp.out.converter.WeatherDataOutDtoWeatherDataDomainConverter;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class GetWeatherDataByLatitudeAndLongitudeAdapterFromGetWeatherDataFromOutApi implements GetWeatherDataFromOutGoingWeatherApiPort {
+public class OutWeatherApiAdapter implements GetWeatherDataFromOutWeatherApiPort {
 
     private final RestTemplate restTemplate;
     private final WeatherApiConfig weatherApiConfig;

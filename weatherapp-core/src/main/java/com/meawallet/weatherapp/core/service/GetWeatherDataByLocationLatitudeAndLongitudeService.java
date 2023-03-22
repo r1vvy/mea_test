@@ -1,68 +1,97 @@
 package com.meawallet.weatherapp.core.service;
 
-import com.meawallet.weatherapp.core.exceptions.NotImplementedException;
-import com.meawallet.weatherapp.core.port.out.GetLocationByLatitudeAndLongitudePort;
+import com.meawallet.weatherapp.core.port.out.*;
 import com.meawallet.weatherapp.core.port.in.GetWeatherDataByLocationLatitudeAndLongitudeUseCase;
-import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutGoingWeatherApiPort;
-import com.meawallet.weatherapp.core.port.out.GetWeatherDataByLocationLatitudeAndLongitudeFromRepoPort;
-import com.meawallet.weatherapp.core.port.out.SaveLocationPort;
-import com.meawallet.weatherapp.core.port.out.SaveWeatherDataPort;
-import com.meawallet.weatherapp.core.utils.LatLongMathContext;
+import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutWeatherApiPort;
+import com.meawallet.weatherapp.core.utils.LatLongUtils;
 import com.meawallet.weatherapp.domain.Location;
 import com.meawallet.weatherapp.domain.WeatherData;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.math.RoundingMode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetWeatherDataByLocationLatitudeAndLongitudeUseCase {
     private final SaveLocationPort saveLocationPort;
-    private final SaveWeatherDataPort saveWeatherDataPort;
-    private final GetWeatherDataByLocationLatitudeAndLongitudeFromRepoPort getWeatherDataByLocationLatitudeAndLongitudeFromRepoPort;
-    private final GetWeatherDataFromOutGoingWeatherApiPort getWeatherDataFromOutGoingWeatherApiPort;
+    private final GetWeatherDataFromOutWeatherApiPort getWeatherDataFromOutWeatherApiPort;
     private final GetLocationByLatitudeAndLongitudePort getLocationByLatitudeAndLongitudePort;
+    private final GetWeatherDataByLocationPort getWeatherDataByLocationPort;
 
-    // TODO
     @Override
     public WeatherData getWeatherData(BigDecimal latitude, BigDecimal longitude) {
-        throw new NotImplementedException("Not implemented yet!");
-        /*
-        latitude.round(LatLongMathContext.LAT_LONG_PRECISION);
-        longitude.round(LatLongMathContext.LAT_LONG_PRECISION);
+        latitude = latitude.setScale(LatLongUtils.LAT_LONG_SCALE, RoundingMode.HALF_UP);
+        longitude = longitude.setScale(LatLongUtils.LAT_LONG_SCALE, RoundingMode.HALF_UP);
 
         var location = getLocationByLatitudeAndLongitudePort.getLocation(latitude, longitude);
 
-        if(location.isPresent()) {
-            WeatherData weatherData;
-            var currentTime = ZonedDateTime.now(ZoneOffset.UTC);
-
-            weatherData= location.get().weatherData();
-
-            if(weatherData.timestamp().getHour() == currentTime.getHour()) {
-                return weatherData;
-            }
-            else {
-                weatherData = getWeatherDataFromOutGoingWeatherApiPort.getWeatherData(latitude, longitude)
-                        .stream()
-                        .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
-                        .findAny()
-                        .orElseThrow(() -> new RuntimeException("Request failed!"));
-
-                var savedWeatherData = saveWeatherDataPort.save(weatherData);
-                location.get()
-                        .toBuilder()
-                        .weatherData(savedWeatherData);
-            }
+        if (location.isPresent()) {
+            return getWeatherDataForExistingLocation(location.get());
+        } else {
+            return getWeatherDataForNewLocation(latitude, longitude);
         }
-        saveLocationPort(location.get());
+    }
 
-        return null;
-        */
+    private WeatherData getWeatherDataForExistingLocation(Location location) {
+        var weatherData = location.weatherData();
+
+        if (isWeatherDataFromCurrentHourUtc(weatherData)) {
+            log.debug("Weather data found from cache: {}", weatherData);
+            
+            return weatherData;
+        } else {
+            weatherData = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
+            
+            updateLocationWithWeatherData(location, weatherData);
+            log.debug("Weather data updated successfully: {}", weatherData);
+            
+            return weatherData;
+        }
+    }
+
+    private WeatherData getWeatherDataForNewLocation(BigDecimal latitude, BigDecimal longitude) {
+        var weatherData = fetchWeatherDataFromOutWeatherApi(latitude, longitude);
+
+        var newLocation = Location.builder()
+                .latitude(latitude)
+                .longitude(longitude)
+                .weatherData(weatherData)
+                .build();
+
+        var savedLocation = saveLocationPort.save(newLocation);
+        log.debug("Weather data and location saved successfully: {}", savedLocation);
+
+        return savedLocation.weatherData();
+    }
+
+    private void updateLocationWithWeatherData(Location location, WeatherData weatherData) {
+        location.toBuilder()
+                .weatherData(weatherData)
+                .build();
+
+        saveLocationPort.save(location);
+    }
+
+    private boolean isWeatherDataFromCurrentHourUtc(WeatherData weatherData) {
+        return weatherData.timestamp().getHour() == ZonedDateTime.now(ZoneOffset.UTC).getHour();
+    }
+
+    private WeatherData fetchWeatherDataFromOutWeatherApi(BigDecimal latitude, BigDecimal longitude) {
+        WeatherData weatherData;
+        weatherData = getWeatherDataFromOutWeatherApiPort.getWeatherData(latitude, longitude)
+                .stream()
+                .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("No weather data found from Outgoing Weather API"));
+
+        log.debug("Weather data found from Outgoing Weather API: {}", weatherData);
+
+        return weatherData;
     }
 }

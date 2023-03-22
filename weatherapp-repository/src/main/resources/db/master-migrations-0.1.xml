@@ -14,7 +14,8 @@
             <column name="longitude" type="DECIMAL(7,4)">
                 <constraints nullable="false"/>
             </column>
-            <column name="weather_info_id" type="INTEGER"/>
+            <column name="weather_info_id" type="INTEGER">
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="create.weather_info.table" author="emils.seflers">
@@ -22,20 +23,13 @@
             <column name="id" type="INTEGER" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="temperature" type="DECIMAL(3,1)">
+            <column name="air_temperature" type="DECIMAL(3,1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp" type="DATETIME">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
-    <changeSet id="create.timestamp.column.weather_info.table" author="emils.seflers">
-        <addColumn tableName="weather_info">
-            <column name="timestamp" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet id="edit.temperature.column.name.weather_info.table" author="emils.seflers">
-        <renameColumn tableName="weather_info" oldColumnName="temperature" newColumnName="air_temperature" columnDataType="DECIMAL(3,1)"/>
     </changeSet>
     <changeSet id="add.relations.from.locations.to.weather_info" author="emils.seflers">
         <addForeignKeyConstraint baseTableName="locations"

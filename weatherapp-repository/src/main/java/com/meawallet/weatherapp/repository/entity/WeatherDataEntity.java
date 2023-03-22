@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -20,10 +22,10 @@ public class WeatherDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
     @Column(name = "timestamp")
+    @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
     ZonedDateTime timestamp;
     @Column(name = "air_temperature")
     BigDecimal airTemperature;
-    @OneToOne(mappedBy = "weatherData")
-    LocationEntity location;
 }

@@ -26,5 +26,5 @@ public class LocationEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "weather_info_id", referencedColumnName = "id")
-    WeatherDataEntity weatherData;
+    WeatherDataEntity weatherDataEntity;
 }
