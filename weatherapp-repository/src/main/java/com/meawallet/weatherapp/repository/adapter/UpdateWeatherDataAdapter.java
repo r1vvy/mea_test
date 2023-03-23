@@ -17,7 +17,6 @@ public class UpdateWeatherDataAdapter implements UpdateWeatherDataPort {
     private final WeatherDataRepository weatherDataRepository;
     private final WeatherDataDomainToEntityConverter weatherDataDomainToEntityConverter;
     @Override
-    @Transactional
     public void update(WeatherData weatherData) {
         var entity = weatherDataDomainToEntityConverter.convert(weatherData);
         weatherDataRepository.save(entity);

@@ -24,7 +24,7 @@ public class LocationEntity {
     @Column(name = "longitude")
     BigDecimal longitude;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "weather_info_id", referencedColumnName = "id")
     WeatherDataEntity weatherDataEntity;
 }

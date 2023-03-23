@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 @Slf4j
 public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetWeatherDataByLocationLatitudeAndLongitudeUseCase {
     private final SaveLocationPort saveLocationPort;
+    private final SaveWeatherDataPort saveWeatherDataPort;
     private final UpdateWeatherDataPort updateWeatherDataPort;
     private final GetWeatherDataFromOutWeatherApiPort getWeatherDataFromOutWeatherApiPort;
     private final GetLocationByLatitudeAndLongitudePort getLocationByLatitudeAndLongitudePort;
@@ -43,7 +44,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
         var weatherData = location.weatherData();
 
         if (isWeatherDataFromCurrentHourUtc(weatherData)) {
-            log.debug("Weather data found from cache: {}", weatherData);
+            log.debug("Weather data found in cache: {}", weatherData);
             
             return weatherData;
         } else {
@@ -62,15 +63,15 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
 
     private WeatherData getWeatherDataForNewLocation(BigDecimal latitude, BigDecimal longitude) {
         var weatherData = fetchWeatherDataFromOutWeatherApi(latitude, longitude);
+        var savedWeatherData = saveWeatherDataPort.save(weatherData);
 
         var newLocation = Location.builder()
                 .latitude(latitude)
                 .longitude(longitude)
-                .weatherData(weatherData)
+                .weatherData(savedWeatherData)
                 .build();
 
         var savedLocation = saveLocationPort.save(newLocation);
-        log.debug("Weather data and location saved successfully: {}", savedLocation);
 
         return savedLocation.weatherData();
     }

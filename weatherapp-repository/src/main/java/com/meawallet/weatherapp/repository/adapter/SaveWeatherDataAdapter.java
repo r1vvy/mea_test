@@ -19,12 +19,12 @@ public class SaveWeatherDataAdapter implements SaveWeatherDataPort {
     private final WeatherDataEntityToDomainConverter weatherDataEntityToDomainConverter;
 
     @Override
-    @Transactional
     public WeatherData save(WeatherData weatherData) {
         var weatherDataEntity = weatherDataDomainToEntityConverter.convert(weatherData);
         var savedEntity = weatherDataRepository.save(weatherDataEntity);
 
         log.debug("WeatherData entity saved successfully: {}", savedEntity);
+
         return weatherDataEntityToDomainConverter.convert(savedEntity);
     }
 }
