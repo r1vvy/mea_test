@@ -5,6 +5,7 @@ import com.meawallet.weatherapp.domain.WeatherData;
 import com.meawallet.weatherapp.out.config.WeatherApiConfig;
 import com.meawallet.weatherapp.out.converter.WeatherDataOutDtoWeatherDataDomainConverter;
 import com.meawallet.weatherapp.out.dto.GetWeatherDataOutResponse;
+import com.meawallet.weatherapp.core.exception.OutgoingWeatherApiException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,8 +42,9 @@ public class OutWeatherApiAdapter implements GetWeatherDataFromOutWeatherApiPort
                     .collect(Collectors.toList());
 
         } catch (RestClientException restClientException) {
-            log.error("Received error from Outgoing Weather API: {}", restClientException.getMessage());
-            throw new RuntimeException(restClientException);
+
+            log.error("Received error from the Outgoing Weather API: {}", restClientException.getMessage());
+            throw new OutgoingWeatherApiException("Failed to fetch data from the Outgoing Weather API");
         }
     }
 }

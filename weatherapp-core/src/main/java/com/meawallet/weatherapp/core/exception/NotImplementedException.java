@@ -1,6 +1,4 @@
-package com.meawallet.weatherapp.core.exceptions;
-
-import org.springframework.stereotype.Component;
+package com.meawallet.weatherapp.core.exception;
 
 public class NotImplementedException extends RuntimeException {
     public NotImplementedException(String message) {

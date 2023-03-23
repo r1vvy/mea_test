@@ -5,4 +5,5 @@ include 'weatherapp-in'
 include 'weatherapp-out'
 include 'weatherapp-repository'
 include 'weatherapp-domain'
+include 'weatherapp-itest'
 

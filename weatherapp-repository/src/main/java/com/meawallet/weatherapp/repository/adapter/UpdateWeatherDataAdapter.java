@@ -1,5 +1,6 @@
 package com.meawallet.weatherapp.repository.adapter;
 
+import com.meawallet.weatherapp.core.exception.NoDataFoundException;
 import com.meawallet.weatherapp.core.port.out.UpdateWeatherDataPort;
 import com.meawallet.weatherapp.domain.WeatherData;
 import com.meawallet.weatherapp.repository.converter.WeatherDataDomainToEntityConverter;
@@ -18,7 +19,9 @@ public class UpdateWeatherDataAdapter implements UpdateWeatherDataPort {
     private final WeatherDataDomainToEntityConverter weatherDataDomainToEntityConverter;
     @Override
     public void update(WeatherData weatherData) {
-        var entity = weatherDataDomainToEntityConverter.convert(weatherData);
+        var entity =  weatherDataRepository.findById(weatherData.id())
+                .orElseThrow(() -> new NoDataFoundException("No WeatherData Entity found with id=" + weatherData.id()));
+
         weatherDataRepository.save(entity);
 
         log.debug("WeatherData entity updated successfully: {}", entity);
