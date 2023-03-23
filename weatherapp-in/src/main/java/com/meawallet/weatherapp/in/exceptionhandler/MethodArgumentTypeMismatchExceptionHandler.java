@@ -28,7 +28,7 @@ public class MethodArgumentTypeMismatchExceptionHandler extends ResponseEntityEx
         responseBody.put("status", HttpStatus.BAD_REQUEST);
 
         String parameterName = ex.getParameter().getParameterName();
-        String message = "Invalid value for the field " + parameterName + ". Please provide a valid number.";
+        String message = "Invalid value for the field " + parameterName + ". Please provide a valid field value.";
         responseBody.put("message", message);
 
         log.debug("Request failed because method argument type mismatch: {}, {}", request, ex.getMessage());
