@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 @Slf4j
 public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetWeatherDataByLocationLatitudeAndLongitudeUseCase {
     private final SaveLocationPort saveLocationPort;
+    private final UpdateWeatherDataPort updateWeatherDataPort;
     private final GetWeatherDataFromOutWeatherApiPort getWeatherDataFromOutWeatherApiPort;
     private final GetLocationByLatitudeAndLongitudePort getLocationByLatitudeAndLongitudePort;
 
@@ -47,12 +48,12 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
             return weatherData;
         } else {
             weatherData = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
-            // TODO:
-            /*
-            Location entity saved successfully: LocationEntity(id=1, latitude=57.3937, longitude=21.5647, weatherDataEntity=WeatherDataEntity(id=1, timestamp=2023-03-23T07:00Z, airTemperature=5.8))
-            Weather data updated successfully: WeatherData[id=null, airTemperature=5.2, timestamp=2023-03-23T08:00Z]
-             */
-            updateLocationWithWeatherData(location, weatherData);
+
+            weatherData = weatherData.toBuilder()
+                    .id(location.weatherData().id())
+                    .build();
+
+            updateWeatherDataPort.update(weatherData);
             log.debug("Weather data updated successfully: {}", weatherData);
             
             return weatherData;
@@ -72,14 +73,6 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
         log.debug("Weather data and location saved successfully: {}", savedLocation);
 
         return savedLocation.weatherData();
-    }
-
-    private void updateLocationWithWeatherData(Location location, WeatherData weatherData) {
-        location.toBuilder()
-                .weatherData(weatherData)
-                .build();
-
-        saveLocationPort.save(location);
     }
 
     private boolean isWeatherDataFromCurrentHourUtc(WeatherData weatherData) {
