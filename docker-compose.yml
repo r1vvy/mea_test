@@ -20,6 +20,7 @@ services:
       DB_PORT: ${DB_PORT}
     env_file:
       - .env
+    # cmd : /cron-job/delete_old_weather_data.sh >> /cron-job/delete_old_weather_data.log 2>&1
     networks:
       - weatherapp-network
 
