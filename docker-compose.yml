@@ -6,6 +6,7 @@ services:
     image: "mariadb:10.5.8"
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./cron-job:/cron-job
     restart: always
     ports:
       - "${DB_PORT}:${DB_PORT}"
@@ -15,9 +16,10 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: database
+      DB_PORT: ${DB_PORT}
     env_file:
       - .env
-    command: bash -c "./delete_old_weather_data.sh && exec mysqld"
     networks:
       - weatherapp-network
 

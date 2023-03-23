@@ -1,5 +1,6 @@
 package com.meawallet.weatherapp.core.service;
 
+import com.meawallet.weatherapp.core.exceptions.NoDataFoundException;
 import com.meawallet.weatherapp.core.port.out.*;
 import com.meawallet.weatherapp.core.port.in.GetWeatherDataByLocationLatitudeAndLongitudeUseCase;
 import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutWeatherApiPort;
@@ -22,7 +23,6 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
     private final SaveLocationPort saveLocationPort;
     private final GetWeatherDataFromOutWeatherApiPort getWeatherDataFromOutWeatherApiPort;
     private final GetLocationByLatitudeAndLongitudePort getLocationByLatitudeAndLongitudePort;
-    private final GetWeatherDataByLocationPort getWeatherDataByLocationPort;
 
     @Override
     public WeatherData getWeatherData(BigDecimal latitude, BigDecimal longitude) {
@@ -88,7 +88,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
                 .stream()
                 .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("No weather data found from Outgoing Weather API"));
+                .orElseThrow(() -> new NoDataFoundException("No weather data found within the last hour from the Outgoing Weather API"));
 
         log.debug("Weather data found from Outgoing Weather API: {}", weatherData);
 
