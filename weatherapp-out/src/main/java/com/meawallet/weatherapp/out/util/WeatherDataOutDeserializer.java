@@ -34,14 +34,6 @@ public class WeatherDataOutDeserializer extends JsonDeserializer<GetWeatherDataO
                     .build()
             );
         });
-        /*
-        if (timeseriesNode.isArray()) {
-            for (JsonNode tsNode : timeseriesNode) {
-                String time = tsNode.get("time").asText();
-                BigDecimal airTemperature = tsNode.get("data").get("instant").get("details").get("air_temperature").decimalValue();
-                hourlyWeatherDataList.add(new WeatherDataOutDto(ZonedDateTime.parse(time), airTemperature));
-            }
-        }*/
 
         return new GetWeatherDataOutResponse(hourlyWeatherDataList);
     }

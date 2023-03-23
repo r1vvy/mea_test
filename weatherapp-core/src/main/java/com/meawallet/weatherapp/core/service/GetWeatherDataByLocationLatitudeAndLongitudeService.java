@@ -47,7 +47,11 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
             return weatherData;
         } else {
             weatherData = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
-            
+            // TODO:
+            /*
+            Location entity saved successfully: LocationEntity(id=1, latitude=57.3937, longitude=21.5647, weatherDataEntity=WeatherDataEntity(id=1, timestamp=2023-03-23T07:00Z, airTemperature=5.8))
+            Weather data updated successfully: WeatherData[id=null, airTemperature=5.2, timestamp=2023-03-23T08:00Z]
+             */
             updateLocationWithWeatherData(location, weatherData);
             log.debug("Weather data updated successfully: {}", weatherData);
             
