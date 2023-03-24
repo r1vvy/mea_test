@@ -22,8 +22,6 @@ spring:
     show-sql: true
 
 server:
-  error:
-    include-message: always
   port: 20000
 
 dbunit:

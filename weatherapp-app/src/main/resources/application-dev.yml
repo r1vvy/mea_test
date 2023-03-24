@@ -12,7 +12,7 @@ spring:
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
+    url: ${DB_URL}
     driver-class-name: ${DB_DRIVER}
 
   jpa:
@@ -23,7 +23,7 @@ spring:
   liquibase:
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
+    url: ${DB_URL}
     change-log: classpath:db/master.xml
 
 logging:
