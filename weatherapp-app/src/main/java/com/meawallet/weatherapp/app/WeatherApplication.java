@@ -9,10 +9,11 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication(scanBasePackages = "com.meawallet.weatherapp")
 // IF CANT LOAD .ENV FILE, TRY THIS:
 //@PropertySource(value = "file:./.env")
-@Profile(value = "dev")
 public class WeatherApplication {
     public static void main(String[] args) {
 
-        SpringApplication.run(WeatherApplication.class);
+        SpringApplication app = new SpringApplication(WeatherApplication.class);
+        app.setAdditionalProfiles("dev");
+        app.run(args);
     }
 }

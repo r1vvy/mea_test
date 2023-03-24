@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DatabaseTearDown(value = "classpath:dbunit/empty_dataset.xml", type = DELETE_ALL)
 public class GetWeatherDataByLocationLatitudeAndLongitudeTest extends BaseIntegrationTest {
 
-//    @Test
+    @Test
     @DatabaseSetup(value = "classpath:dbunit/findWeatherDataSuccess.xml")
     @ExpectedDatabase(value = "classpath:dbunit/findWeatherDataSuccess.xml", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     void shouldReturnWeatherDataFromCache() throws Exception {

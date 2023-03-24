@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile:
-        - itest
+        - dev
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -25,3 +25,9 @@ dbunit:
 
 weather-api:
   weather-url: http://localhost:20000/random
+
+
+server:
+  error:
+    include-message: always
+  port: 20000

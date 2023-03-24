@@ -10,6 +10,7 @@
             </column>
             <column name="latitude" type="DECIMAL(7,4)">
                 <constraints nullable="false"/>
+                
             </column>
             <column name="longitude" type="DECIMAL(7,4)">
                 <constraints nullable="false"/>
@@ -39,6 +40,14 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"
         />
+    </changeSet>
+    <changeSet id="add.index.to.latitude.longitude.columns.locations.table" author="emils.seflers">
+        <createIndex tableName="locations" indexName="idx_locations_latitude">
+            <column name="latitude"/>
+        </createIndex>
+        <createIndex tableName="locations" indexName="idx_locations_longitude">
+            <column name="longitude"/>
+        </createIndex>
     </changeSet>
     
 </databaseChangeLog>

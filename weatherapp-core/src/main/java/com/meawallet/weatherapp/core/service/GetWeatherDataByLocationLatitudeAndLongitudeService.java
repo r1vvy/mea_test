@@ -50,11 +50,12 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
             log.debug("Weather data found in cache: {}", weatherData);
 
         } else {
-            var weatherDataFromOutWeatherApi = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
-            weatherData = weatherDataFromOutWeatherApi.toBuilder()
-                    .id(location.weatherData().id())
-                    .build();
             try {
+                var weatherDataFromOutWeatherApi = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
+                weatherData = weatherDataFromOutWeatherApi.toBuilder()
+                        .id(location.weatherData().id())
+                        .build();
+
                 updateWeatherDataPort.update(weatherData);
                 log.debug("Weather data updated successfully: {}", weatherData);
             } catch(NoDataFoundException exc) {
