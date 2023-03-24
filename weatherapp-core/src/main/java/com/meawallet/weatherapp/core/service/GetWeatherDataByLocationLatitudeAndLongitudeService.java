@@ -20,8 +20,8 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 @Service
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetWeatherDataByLocationLatitudeAndLongitudeUseCase {
     private final SaveLocationPort saveLocationPort;
     private final SaveWeatherDataPort saveWeatherDataPort;
