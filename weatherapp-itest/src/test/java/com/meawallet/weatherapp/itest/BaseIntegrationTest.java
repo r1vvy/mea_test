@@ -33,6 +33,7 @@ import java.nio.charset.Charset;
 @AutoConfigureMockMvc
 @EnableConfigurationProperties
 @TestPropertySource(locations = "classpath:application-itest.yml")
+@ActiveProfiles("itest")
 public class BaseIntegrationTest {
 
     @Autowired

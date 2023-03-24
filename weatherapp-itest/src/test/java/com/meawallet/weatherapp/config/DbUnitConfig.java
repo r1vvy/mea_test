@@ -5,6 +5,8 @@ import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.dataset.datatype.DataTypeException;
 import org.dbunit.ext.h2.H2DataTypeFactory;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,7 @@ public class DbUnitConfig {
     @Bean
     public DatabaseConfigBean dbUnitDatabaseConfig() {
         var databaseConfigBean = new DatabaseConfigBean();
-        databaseConfigBean.setDatatypeFactory(new ExtendedH2DataTypeFactory());
+        databaseConfigBean.setDatatypeFactory(new MySqlDataTypeFactory());
         databaseConfigBean.setAllowEmptyFields(true);
         databaseConfigBean.setCaseSensitiveTableNames(false);
         databaseConfigBean.setQualifiedTableNames(true);
@@ -36,26 +38,15 @@ public class DbUnitConfig {
     }
 
     @Bean
-    public DataSource dbUnitDataSource(@Value("${dbunit.datasource.url}") String url,
-                                       @Value("${dbunit.datasource.username}") String username,
-                                       @Value("${dbunit.datasource.password}") String password,
-                                       @Value("${dbunit.datasource.driver}") String driver) {
+    public DataSource dbUnitDataSource(@Value("jdbc:mariadb://localhost:3306/weatherapp_db") String url,
+                                       @Value("weatherapp_user") String username,
+                                       @Value("m34walletIsC00l") String password,
+                                       @Value("org.mariadb.jdbc.Driver") String driver) {
         return DataSourceBuilder.create()
                                 .driverClassName(driver)
                                 .url(url)
                                 .username(username)
                                 .password(password)
                                 .build();
-    }
-
-
-    public class ExtendedH2DataTypeFactory extends H2DataTypeFactory {
-        @Override
-        public DataType createDataType(int sqlType, String sqlTypeName, String tableName, String columnName) throws DataTypeException {
-            if (sqlTypeName.equalsIgnoreCase("TIMESTAMP WITH TIME ZONE")) {
-                return DataType.TIMESTAMP;
-            }
-            return super.createDataType(sqlType, sqlTypeName, tableName, columnName);
-        }
     }
 }

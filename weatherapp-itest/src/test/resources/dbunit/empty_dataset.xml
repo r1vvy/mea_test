@@ -1,4 +1,4 @@
 <dataset>
-    <PUBLIC.weather_info/>
-    <PUBLIC.locations/>
+    <weather_info/>
+    <locations/>
 </dataset>
