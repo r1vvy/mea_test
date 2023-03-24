@@ -19,6 +19,7 @@ spring:
       ddl-auto: validate
     show-sql: true
 
+
 dbunit:
   datasource:
     driver-class-name: org.h2.Driver

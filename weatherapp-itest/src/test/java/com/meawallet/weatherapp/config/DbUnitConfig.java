@@ -35,10 +35,10 @@ public class DbUnitConfig {
     }
 
     @Bean
-    public DataSource dbUnitDataSource(@Value("$jdbc:h2:mem:test") String url,
-                                       @Value("sa") String username,
-                                       @Value("") String password,
-                                       @Value("jdbc:h2:mem:test") String driver) {
+    public DataSource dbUnitDataSource(@Value("${dbunit.datasource.url}") String url,
+                                       @Value("${dbunit.datasource.username}") String username,
+                                       @Value("${dbunit.datasource.password}") String password,
+                                       @Value("${dbunit.datasource.driver}") String driver) {
         return DataSourceBuilder.create()
                                 .driverClassName(driver)
                                 .url(url)
