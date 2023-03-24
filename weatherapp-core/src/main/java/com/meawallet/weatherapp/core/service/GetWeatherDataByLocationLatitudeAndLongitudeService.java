@@ -48,20 +48,20 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
 
         if (isWeatherDataFromCurrentHourUtc(weatherData)) {
             log.debug("Weather data found in cache: {}", weatherData);
-            
-            return weatherData;
 
-        }
-        weatherData = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
-        weatherData = weatherData.toBuilder()
-                .id(location.weatherData().id())
-                .build();
+        } else {
+            var weatherDataFromOutWeatherApi = fetchWeatherDataFromOutWeatherApi(location.latitude(), location.longitude());
+            weatherData = weatherDataFromOutWeatherApi.toBuilder()
+                    .id(location.weatherData().id())
+                    .build();
+            try {
+                updateWeatherDataPort.update(weatherData);
+                log.debug("Weather data updated successfully: {}", weatherData);
+            } catch(NoDataFoundException exc) {
+                log.debug("Failed to update weather data: {}", exc.getMessage());
 
-        try {
-            updateWeatherDataPort.update(weatherData);
-            log.debug("Weather data updated successfully: {}", weatherData);
-        } catch(NoDataFoundException exc) {
-            log.debug("Failed to update weather data: {}", exc.getMessage());
+                throw exc;
+            }
         }
 
         return weatherData;
@@ -84,17 +84,19 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
 
     private WeatherData fetchWeatherDataFromOutWeatherApi(BigDecimal latitude, BigDecimal longitude) {
         try {
-            var weatherData = getWeatherDataFromOutWeatherApiPort.getWeatherData(latitude, longitude)
+            var weatherDataFromOutWeatherApi = getWeatherDataFromOutWeatherApiPort.getWeatherData(latitude, longitude)
                     .stream()
                     .filter(incomingData -> incomingData.timestamp().isAfter(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1)))
                     .findAny()
                     .orElseThrow(() -> new NoDataFoundException("No weather data found within the last hour from the Outgoing Weather API"));
 
-            log.debug("Weather data found from Outgoing Weather API: {}", weatherData);
+            log.debug("Weather data found from Outgoing Weather API: {}", weatherDataFromOutWeatherApi);
 
-            return weatherData;
+            return weatherDataFromOutWeatherApi;
         } catch(OutgoingWeatherApiException | NoDataFoundException exc) {
-            throw new WeatherDataFetchException("Failed to fetch Weather Data from Outgoing Weather API ");
+
+            log.debug("Failed to fetch Weather Data from Outgoing Weather API: {}", exc.getMessage());
+            throw new WeatherDataFetchException("Failed to fetch Weather Data from Outgoing Weather API");
         }
     }
 

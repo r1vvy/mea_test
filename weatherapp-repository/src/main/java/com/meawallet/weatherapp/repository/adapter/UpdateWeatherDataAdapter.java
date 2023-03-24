@@ -23,7 +23,5 @@ public class UpdateWeatherDataAdapter implements UpdateWeatherDataPort {
                 .orElseThrow(() -> new NoDataFoundException("No WeatherData Entity found with id=" + weatherData.id()));
 
         weatherDataRepository.save(entity);
-
-        log.debug("WeatherData entity updated successfully: {}", entity);
     }
 }
