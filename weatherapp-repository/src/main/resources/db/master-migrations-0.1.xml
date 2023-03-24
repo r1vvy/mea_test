@@ -49,5 +49,10 @@
             <column name="longitude"/>
         </createIndex>
     </changeSet>
+    <changeSet id="add.index.to.timestamp.column.weather_info.table" author="emils.seflers">
+        <createIndex tableName="weather_info" indexName="idx_timestamp">
+            <column name="timestamp"></column>
+        </createIndex>
+    </changeSet>
     
 </databaseChangeLog>
