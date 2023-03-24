@@ -19,6 +19,11 @@ spring:
       ddl-auto: validate
     show-sql: true
 
+  liquibase:
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mariadb://localhost:${DB_PORT}/weatherapp_db
+    change-log: classpath:db/master.xml
 
 dbunit:
   datasource:
