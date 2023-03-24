@@ -1,4 +1,8 @@
 spring:
+  config:
+    activate:
+      on-profile:
+        - itest
   h2:
     console:
       enabled: true
@@ -15,16 +19,12 @@ spring:
       ddl-auto: validate
     show-sql: true
 
-  liquibase:
-    user: sa
+dbunit:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
     password:
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
-    change-log: classpath:db/master.xml
-
-logging:
-  level:
-    com.meawallet.weatherapp: DEBUG
-#    root: TRACE
+    url: jdbc:h2:mem:test
 
 weather-api:
-  weather-url: https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={latitude}&lon={longitude}
+  weather-url: http://localhost:20000/random

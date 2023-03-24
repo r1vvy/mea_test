@@ -1,6 +1,8 @@
 spring:
-  profiles:
-    active: dev
+  config:
+    activate:
+      on-profile:
+        - dev
 
   mariadb:
     console:
