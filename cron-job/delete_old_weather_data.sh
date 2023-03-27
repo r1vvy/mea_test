@@ -1,5 +1,5 @@
+#!/bin/bash
 set -e
-
 while [ true ]
 do
   echo "$(date): Deleting old weather data..." >> cron-job/delete_old_weather_data.log
