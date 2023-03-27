@@ -1,5 +1,7 @@
 package com.meawallet.weatherapp.itest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.meawallet.weatherapp.app.WeatherApplication;
@@ -12,6 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 
 @TestExecutionListeners(value = {
         TransactionalTestExecutionListener.class,

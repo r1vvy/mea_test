@@ -19,7 +19,6 @@
             <option value="$PROJECT_DIR$/weatherapp-itest" />
             <option value="$PROJECT_DIR$/weatherapp-out" />
             <option value="$PROJECT_DIR$/weatherapp-repository" />
-            <option value="$PROJECT_DIR$/weatherapp-utest" />
           </set>
         </option>
       </GradleProjectSettings>

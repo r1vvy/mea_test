@@ -6,5 +6,4 @@ include 'weatherapp-out'
 include 'weatherapp-repository'
 include 'weatherapp-domain'
 include 'weatherapp-itest'
-include 'weatherapp-utest'
 
