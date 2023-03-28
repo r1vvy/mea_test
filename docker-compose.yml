@@ -7,7 +7,7 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
       - ./cron-job:/cron-job
-    restart: always
+    restart: on-failure[:5]
     ports:
       - "${DB_PORT}:${DB_PORT}"
     environment:

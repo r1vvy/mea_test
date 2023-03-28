@@ -9,11 +9,15 @@ import com.meawallet.weatherapp.in.converter.WeatherDataToGetTemperatureInRespon
 import com.meawallet.weatherapp.in.dto.ErrorResponse;
 import com.meawallet.weatherapp.in.dto.GetTemperatureInResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +33,21 @@ public class AppController {
 
     private final WeatherDataToGetTemperatureInResponseConverter weatherDataToGetTemperatureInResponseConverter;
 
+    @Validated
     @GetMapping("")
-    public ResponseEntity<GetTemperatureInResponse> findByLatitudeAndLongitude(@RequestParam(name = "lat") BigDecimal latitude, @RequestParam(name = "lon") BigDecimal longitude) {
+    public ResponseEntity<GetTemperatureInResponse> findByLatitudeAndLongitude(
+            @Valid
+            @NotNull(message = "latitude not specified")
+            @Min(value = -90, message = "invalid latitude value")
+            @Max(value = 90, message = "invalid latitude value")
+            @RequestParam(name = "lat") BigDecimal latitude,
+
+            @Valid
+            @NotNull(message = "longitude not specified")
+            @Min(value = -180, message = "invalid longitude value")
+            @Max(value = 180, message = "invalid longitude value")
+            @RequestParam(name = "lon") BigDecimal longitude)
+    {
         log.debug("Recieved find weather data by latitude and longitude request: latitude={}, longitude={}",latitude, longitude );
 
         var weatherData = getWeatherDataByLocationLatitudeAndLongitudeUseCase.getWeatherData(latitude, longitude);
