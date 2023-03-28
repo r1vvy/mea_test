@@ -7,6 +7,7 @@ import com.meawallet.weatherapp.core.port.out.*;
 import com.meawallet.weatherapp.core.port.in.GetWeatherDataByLocationLatitudeAndLongitudeUseCase;
 import com.meawallet.weatherapp.core.port.out.GetWeatherDataFromOutWeatherApiPort;
 import com.meawallet.weatherapp.core.utils.LatLongUtils;
+import com.meawallet.weatherapp.core.utils.TimezoneUtils;
 import com.meawallet.weatherapp.domain.Location;
 import com.meawallet.weatherapp.domain.WeatherData;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ import java.math.RoundingMode;
 import java.time.DateTimeException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+
+import static com.meawallet.weatherapp.core.utils.TimezoneUtils.SYSTEM_TIMEZONE;
 
 @Service
 @Slf4j
@@ -102,6 +105,6 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeService implements GetW
     }
 
     private boolean isWeatherDataFromCurrentHourUtc(WeatherData weatherData) {
-        return weatherData.timestamp().getHour() == ZonedDateTime.now(ZoneOffset.UTC).getHour();
+        return weatherData.timestamp().getHour() == ZonedDateTime.now(SYSTEM_TIMEZONE).getHour();
     }
 }

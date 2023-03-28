@@ -16,15 +16,15 @@ import java.util.Set;
 public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @Column(name = "latitude")
-    BigDecimal latitude;
+    private BigDecimal latitude;
 
     @Column(name = "longitude")
-    BigDecimal longitude;
+    private BigDecimal longitude;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "weather_info_id", referencedColumnName = "id")
-    WeatherDataEntity weatherDataEntity;
+    private WeatherDataEntity weatherDataEntity;
 }

@@ -1,4 +1,4 @@
-package com.meawallet.weatherapp.core.utest;
+package com.meawallet.weatherapp.core;
 
 import com.meawallet.weatherapp.core.exception.NoDataFoundException;
 import com.meawallet.weatherapp.core.port.out.*;
@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -40,7 +39,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeServiceTest {
     private GetWeatherDataByLocationLatitudeAndLongitudeService service;
 
     @Test
-    public void shouldReturnWeatherDataFromExistingLocationFromCachedData() {
+    protected void shouldReturnWeatherDataFromExistingLocationFromCachedData() {
         Location location = location(newWeatherData());
         var latitude = location.latitude();
         var longitude = location.longitude();
@@ -58,7 +57,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeServiceTest {
     }
 
     @Test
-    public void shouldReturnWeatherDataFromWeatherApiWhenCachedDataIsNotUpdated() {
+    protected void shouldReturnWeatherDataFromWeatherApiWhenCachedDataIsNotUpdated() {
         Location location = location(oldWeatherData());
         var latitude = location.latitude();
         var longitude = location.longitude();
@@ -81,7 +80,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeServiceTest {
     }
 
     @Test
-    public void shouldReturnSavedWeatherDataForNewLocation() {
+    protected void shouldReturnSavedWeatherDataForNewLocation() {
         BigDecimal latitude = new BigDecimal("40.7128");
         BigDecimal longitude = new BigDecimal("-74.0060");
 
@@ -105,7 +104,7 @@ public class GetWeatherDataByLocationLatitudeAndLongitudeServiceTest {
 
 
     @Test
-    public void shouldThrowNoDataFoundExceptionOnGetWeatherDataForExistingLocation() {
+    protected void shouldThrowNoDataFoundExceptionOnGetWeatherDataForExistingLocation() {
         Location location = locationWithoutWeatherData();
 
         Mockito.when(getLocationByLatitudeAndLongitudePort.getLocation(location.latitude(), location.longitude()))

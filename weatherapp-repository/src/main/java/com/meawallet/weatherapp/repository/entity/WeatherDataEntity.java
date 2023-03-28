@@ -21,11 +21,11 @@ public class WeatherDataEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @Column(name = "timestamp")
     @TimeZoneStorage(TimeZoneStorageType.NORMALIZE_UTC)
-    ZonedDateTime timestamp;
+    private ZonedDateTime timestamp;
     @Column(name = "air_temperature")
-    BigDecimal airTemperature;
+    private BigDecimal airTemperature;
 }
