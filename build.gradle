@@ -54,8 +54,10 @@ sonar {
         property "sonar.host.url", "http://localhost:9000"
         property "sonar.projectKey", "mea-test"
         property "sonar.projectName", "MeaWallet Test"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin123"
     }
 }
 
 bootJar { enabled = false}
-tasks['sonarqube'].dependsOn jacocoTestReport
+tasks['sonar'].dependsOn jacocoTestReport
