@@ -1,4 +1,5 @@
 rootProject.name = 'weatherapp'
+
 include 'weatherapp-app'
 include 'weatherapp-core'
 include 'weatherapp-in'

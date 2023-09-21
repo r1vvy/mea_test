@@ -56,4 +56,6 @@ sonar {
     }
 }
 
+bootJar { enabled = false}
+
 tasks['sonarqube'].dependsOn jacocoTestReport
