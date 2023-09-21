@@ -51,11 +51,11 @@ subprojects {
 
 sonar {
     properties {
+        property "sonar.host.url", "http://localhost:9000"
         property "sonar.projectKey", "meatest"
         property "sonar.projectName", "meatest"
     }
 }
 
 bootJar { enabled = false}
-
 tasks['sonarqube'].dependsOn jacocoTestReport
