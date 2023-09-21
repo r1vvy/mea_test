@@ -6,6 +6,4 @@ dependencies {
     implementation project(":weatherapp-repository")
 
     implementation 'org.springframework.boot:spring-boot-starter-web:3.0.3'
-    // IF CANT LOAD .ENV FILE, TRY THIS:
-    //implementation 'io.github.cdimascio:dotenv-java:2.2.0'
 }
