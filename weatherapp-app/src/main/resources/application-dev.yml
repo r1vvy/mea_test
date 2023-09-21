@@ -10,10 +10,10 @@ spring:
       path: /mariadb-console
 
   datasource:
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    url: ${DB_URL}
-    driver-class-name: ${DB_DRIVER}
+    username: weatherapp_db
+    password: weatherapp_user
+    url: jdbc:mariadb://localhost:3306/weatherapp_db
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
@@ -21,10 +21,11 @@ spring:
     show-sql: false
 
   liquibase:
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    url: ${DB_URL}
+    user: weatherapp_db
+    password: weatherapp_user
+    url: jdbc:mariadb://localhost:3306/weatherapp_db
     change-log: classpath:db/master.xml
+    driver-class-name: org.mariadb.jdbc.Driver
 
 logging:
   level:
@@ -36,4 +37,4 @@ weather-api:
 server:
   error:
     include-message: always
-  port: ${WEATHERAPP_PORT}
+  port: 8081
